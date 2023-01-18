@@ -1,6 +1,7 @@
-import 'dart:ffi';
-
+import 'package:first_app/quiz.dart';
 import 'package:flutter/material.dart';
+
+import './result.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,6 +17,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _questionIndex = 0;
   int _score = 0;
+  bool _quizCompleted = false;
 
   final _questions = [
     {
@@ -55,6 +57,10 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _questionIndex++;
       });
+    } else {
+      setState(() {
+        _quizCompleted = true;
+      });
     }
   }
 
@@ -63,16 +69,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: const Text('Quiz App')),
-        body: Column(
-          children: [
-            Text(_questions[_questionIndex]['question'] as String),
-            ...(_questions[_questionIndex]['reponses'] as List)
-                .map((rep) => ElevatedButton(
-                    onPressed: () => _getResponse(rep['score']),
-                    child: Text(rep['text'] as String)))
-                .toList()
-          ],
-        ),
+        body: !_quizCompleted
+            ? Quiz(
+                questions: _questions,
+                questionIndex: _questionIndex,
+                getResponse: _getResponse,
+              )
+            : Result(inputScore: _score),
       ),
     );
   }
