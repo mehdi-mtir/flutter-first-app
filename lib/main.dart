@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,22 +15,47 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _questionIndex = 0;
+  int _score = 0;
 
   final _questions = [
-    {"question": "Quel langage est utilisé avec Flutter?????", "reponses": []},
+    {
+      "question": "Quel langage est utilisé avec Flutter?",
+      "reponses": [
+        {"text": "Javascript", "score": 0},
+        {"text": "Java", "score": 0},
+        {"text": "Dart", "score": 4},
+        {"text": "Go", "score": 0},
+      ]
+    },
     {
       "question": "Quel est le composant principal d'une application Flutter?",
-      "reponses": []
+      "reponses": [
+        {"text": "Component", "score": 0},
+        {"text": "Widget", "score": 4},
+        {"text": "Activity", "score": 0},
+        {"text": "Service", "score": 0},
+      ]
     },
     {
       "question": "En quelle année est apparue la première version de Flutter?",
-      "reponses": []
+      "reponses": [
+        {"text": "2010", "score": 0},
+        {"text": "2015", "score": 0},
+        {"text": "2018", "score": 4},
+        {"text": "2020", "score": 0},
+      ]
     },
   ];
 
-  _getResponse() {
+  _getResponse(int responseScore) {
     print("Reponse sélectionnée!");
-    _questionIndex++;
+    _score += responseScore;
+    print(_score);
+    if (_questionIndex < _questions.length - 1) {
+      setState(() {
+        _questionIndex++;
+      });
+    }
   }
 
   @override
@@ -39,9 +66,11 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           children: [
             Text(_questions[_questionIndex]['question'] as String),
-            ElevatedButton(onPressed: _getResponse, child: Text('Reponse 1')),
-            ElevatedButton(onPressed: _getResponse, child: Text('Reponse 2')),
-            ElevatedButton(onPressed: _getResponse, child: Text('Reponse 3')),
+            ...(_questions[_questionIndex]['reponses'] as List)
+                .map((rep) => ElevatedButton(
+                    onPressed: () => _getResponse(rep['score']),
+                    child: Text(rep['text'] as String)))
+                .toList()
           ],
         ),
       ),
