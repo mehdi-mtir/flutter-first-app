@@ -1,11 +1,35 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int _questionIndex = 0;
+
+  final _questions = [
+    {"question": "Quel langage est utilisé avec Flutter?????", "reponses": []},
+    {
+      "question": "Quel est le composant principal d'une application Flutter?",
+      "reponses": []
+    },
+    {
+      "question": "En quelle année est apparue la première version de Flutter?",
+      "reponses": []
+    },
+  ];
+
+  _getResponse() {
+    print("Reponse sélectionnée!");
+    _questionIndex++;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,16 +38,10 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(title: const Text('Quiz App')),
         body: Column(
           children: [
-            const Text('Question'),
-            ElevatedButton(
-                onPressed: () => print('Reponse 1 sélectionnée!'),
-                child: const Text('Reponse 1')),
-            ElevatedButton(
-                onPressed: () => print('Reponse 2 sélectionnée!'),
-                child: Text('Reponse 2')),
-            ElevatedButton(
-                onPressed: () => print('Reponse 3 sélectionnée!'),
-                child: Text('Reponse 3')),
+            Text(_questions[_questionIndex]['question'] as String),
+            ElevatedButton(onPressed: _getResponse, child: Text('Reponse 1')),
+            ElevatedButton(onPressed: _getResponse, child: Text('Reponse 2')),
+            ElevatedButton(onPressed: _getResponse, child: Text('Reponse 3')),
           ],
         ),
       ),
